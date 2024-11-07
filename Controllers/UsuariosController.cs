@@ -13,6 +13,7 @@ namespace Borboletas.Controllers
         private readonly UsuariosLN _UsuarioLN = new UsuariosLN();
 
         #region Metodos Obtener
+
         [HttpPost("IniciarSesion")]
         public async Task<IActionResult> IniciarSesion([FromBody] InicioSesion Login)
         {
@@ -37,5 +38,30 @@ namespace Borboletas.Controllers
             }
         }
         #endregion Metodos Obtener
+
+        #region Metodos Crear/Insertar
+        [HttpPost("CrearUsuario")]
+        public async Task<IActionResult> CrearUsuario([FromBody] NuevoUsuario ElUsuarioNuevo)
+        {
+            int Resultado = 0;
+            try
+            {
+                Resultado = _UsuarioLN.AgregarUsuario(ElUsuarioNuevo);
+
+                if (Resultado != 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ElUsuarioNuevo, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo crear el usuario", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+        #endregion Metodos Crear/Insertar
     }
 }

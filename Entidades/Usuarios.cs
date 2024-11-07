@@ -27,7 +27,8 @@
         public string Cedula { get; set; }
         public string Telefono { get; set; }
         public string Usuario { get; set; }
-        public string Clave { get; set; }      
+        public string Clave { get; set; }
+        public int IdRol { get; set; }
     }
 
     public class UsuarioRol
