@@ -1,0 +1,6 @@
+@Borboletas_HostAddress = http://localhost:5244
+
+GET {{Borboletas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
