@@ -134,7 +134,7 @@ namespace Borboletas.AccesoDatos
 
         #endregion Metodos Crear/Insertar
 
-        #region Metodos Actualizar
+        #region Metodos Editar
         public int EditarUsuario(EditarUsuario ElUsuario)
         {
             int Resultado = 0;
@@ -173,6 +173,6 @@ namespace Borboletas.AccesoDatos
 
             return Resultado;
         }
-        #endregion Metodos Actualizar
+        #endregion Metodos Editar
     }
 }
