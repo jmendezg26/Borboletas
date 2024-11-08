@@ -37,9 +37,11 @@ namespace Borboletas.Controllers
                 return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
             }
         }
+
         #endregion Metodos Obtener
 
         #region Metodos Crear/Insertar
+
         [HttpPost("CrearUsuario")]
         public async Task<IActionResult> CrearUsuario([FromBody] NuevoUsuario ElUsuarioNuevo)
         {
@@ -63,5 +65,31 @@ namespace Borboletas.Controllers
             }
         }
         #endregion Metodos Crear/Insertar
+
+        #region Metodos Actualizar
+
+        [HttpPost("EditarUsuario")]
+        public async Task<IActionResult> EditarUsuario([FromBody] EditarUsuario ElUsuario)
+        {
+            int Resultado = 0;
+            try
+            {
+                Resultado = _UsuarioLN.EditarUsuario(ElUsuario);
+
+                if (Resultado != 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = Resultado, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo editar el usuario", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+        #endregion Metodos Actualizar
     }
 }

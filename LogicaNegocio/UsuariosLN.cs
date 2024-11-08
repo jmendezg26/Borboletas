@@ -42,5 +42,24 @@ namespace Borboletas.LogicaNegocio
             return Resultado;
         }
         #endregion Metodos Crear/Insertar
+
+        #region Metodos Actualizar
+        public int EditarUsuario(EditarUsuario ElUsuario)
+        {
+            int Resultado = 0;
+
+            try
+            {
+               Resultado = _UsuarioAD.EditarUsuario(ElUsuario);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+        #endregion Metodos Actualizar
+
     }
 }

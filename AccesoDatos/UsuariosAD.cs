@@ -133,5 +133,46 @@ namespace Borboletas.AccesoDatos
         }
 
         #endregion Metodos Crear/Insertar
+
+        #region Metodos Actualizar
+        public int EditarUsuario(EditarUsuario ElUsuario)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ModificarUsuario";
+                cmd.Parameters.AddWithValue("@IdUsuario", ElUsuario.IdUsuario);
+                cmd.Parameters.AddWithValue("@Nombre", ElUsuario.Nombre);
+                cmd.Parameters.AddWithValue("@Cedula", ElUsuario.Cedula);
+                cmd.Parameters.AddWithValue("@Telefono", string.IsNullOrEmpty(ElUsuario.Telefono) ? (object)DBNull.Value : ElUsuario.Telefono);
+                cmd.Parameters.AddWithValue("@Usuario", ElUsuario.Usuario);
+                cmd.Parameters.AddWithValue("@Clave", ElUsuario.Clave);
+                cmd.Parameters.AddWithValue("@IdRol", ElUsuario.IdRol);
+                cmd.Parameters.AddWithValue("@IdEstado", ElUsuario.IdEstado);
+
+                cmd.Parameters.Add("@Resultado", SqlDbType.BigInt);
+                cmd.Parameters["@Resultado"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@Resultado"].Value);
+
+                conexion.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+        #endregion Metodos Actualizar
     }
 }
