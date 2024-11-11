@@ -1,5 +1,7 @@
 ﻿using Borboletas.AccesoDatos;
 using Borboletas.Entidades;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Borboletas.LogicaNegocio
 {
@@ -7,6 +9,21 @@ namespace Borboletas.LogicaNegocio
     {
         private readonly ClientesAD _ClientesAD = new ClientesAD();
 
+        #region Metodos Obtener
+        public List<Clientes> ObtenerClientes()
+        {
+            List<Clientes> ListaClientes = new List<Clientes>();
+
+            try
+            {
+                return ListaClientes = _ClientesAD.ObtenerClientes();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        #endregion Metodos Obtener
 
         #region Metodos Insertar/Crear
         public int AgregarCliente(NuevoCliente ElCliente)

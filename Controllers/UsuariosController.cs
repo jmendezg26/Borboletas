@@ -38,6 +38,29 @@ namespace Borboletas.Controllers
             }
         }
 
+        [HttpGet("ObtenerUsuarios")]
+        public IActionResult ObtenerUsuarios()
+        {
+            List<Usuarios> ListaUsuarios = new List<Usuarios>();
+            try
+            {
+                ListaUsuarios = _UsuarioLN.ObtenerUsuarios();
+
+                if (ListaUsuarios.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ListaUsuarios, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener la lista de usuarios", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+
         #endregion Metodos Obtener
 
         #region Metodos Crear/Insertar

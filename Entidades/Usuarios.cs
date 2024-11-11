@@ -2,6 +2,15 @@
 {
     public class Usuarios
     {
+        public int IdUsuario { get; set; }
+        public string Nombre { get; set; }
+        public string Cedula { get; set; }
+        public string Telefono { get; set; }
+        public string Usuario { get; set; }
+        public int IdEstado { get; set; }
+        public DateTime FechaRegistro { get; set; }
+        public int IdRol { get; set; }
+
     }
 
     public class InicioSesion

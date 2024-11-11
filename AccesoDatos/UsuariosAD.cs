@@ -9,6 +9,23 @@ namespace Borboletas.AccesoDatos
     {
         private readonly BDConexion _BDConnection = new BDConexion();
 
+        #region Carga de Datos
+        private Usuarios CargaUsuarios(IDataReader Ready)
+        {
+            return new Usuarios
+            {
+                IdUsuario = Convert.ToInt32(Ready["IdUsuario"]),
+                Nombre = Convert.ToString(Ready["Nombre"]),
+                Cedula = Convert.ToString(Ready["Cedula"]),
+                Telefono = Convert.ToString(Ready["Telefono"]),
+                Usuario = Convert.ToString(Ready["Usuario"]),
+                IdEstado = Convert.ToInt32(Ready["IdEstado"]),
+                FechaRegistro = Convert.ToDateTime(Ready["FechaRegistro"]),
+                IdRol = Convert.ToInt32(Ready["Rol"]),
+            };
+        }
+        #endregion Carga de Datos
+
         #region Metodos Obtener
         public UsuarioLogin IniciarSesion(string Usuario, string Clave)
         {
@@ -42,6 +59,38 @@ namespace Borboletas.AccesoDatos
 
                 return ElUsuario;
 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<Usuarios> ObtenerUsuarios()
+        {
+            List<Usuarios> ListaUsuarios = new List<Usuarios>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerUsuarios";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    ListaUsuarios.Add(CargaUsuarios(DsReader));
+                }
+
+                conexion.Close();
+
+                return ListaUsuarios;
             }
             catch (Exception ex)
             {

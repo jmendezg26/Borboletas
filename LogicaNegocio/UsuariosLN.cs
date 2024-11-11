@@ -1,5 +1,7 @@
 ﻿using Borboletas.AccesoDatos;
 using Borboletas.Entidades;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Borboletas.LogicaNegocio
 {
@@ -21,6 +23,20 @@ namespace Borboletas.LogicaNegocio
             catch (Exception ex)
             {
                 throw new InvalidOperationException("Error al obtener el usuario", ex);
+            }
+        }
+
+        public List<Usuarios> ObtenerUsuarios()
+        {
+            List<Usuarios> ListaUsuarios = new List<Usuarios>();
+
+            try
+            {
+                return ListaUsuarios = _UsuarioAD.ObtenerUsuarios();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         #endregion Metodos Obtener
