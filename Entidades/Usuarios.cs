@@ -10,6 +10,7 @@
         public int IdEstado { get; set; }
         public DateTime FechaRegistro { get; set; }
         public int IdRol { get; set; }
+        public string Clave { get; set; }
 
     }
 

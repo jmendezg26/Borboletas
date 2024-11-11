@@ -22,6 +22,7 @@ namespace Borboletas.AccesoDatos
                 IdEstado = Convert.ToInt32(Ready["IdEstado"]),
                 FechaRegistro = Convert.ToDateTime(Ready["FechaRegistro"]),
                 IdRol = Convert.ToInt32(Ready["Rol"]),
+                Clave = Convert.ToString(Ready["Clave"]),
             };
         }
         #endregion Carga de Datos
