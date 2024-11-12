@@ -55,7 +55,7 @@ namespace Borboletas.AccesoDatos
                 Articulos = Convert.ToString(Ready["Articulos"]),
                 MontoTotal = Convert.ToDouble(Ready["Total"]),
                 SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
-                FechaCancelacion = Convert.ToDateTime(Ready["FechaCancelacion"]),
+                FechaCancelacion = Ready["FechaCancelacion"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(Ready["FechaCancelacion"]),
                 IdTipoVenta = Convert.ToInt32(Ready["IdTipoVenta"]),
                 IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
