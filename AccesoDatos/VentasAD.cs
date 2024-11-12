@@ -27,7 +27,7 @@ namespace Borboletas.AccesoDatos
                 IdUsuario = Convert.ToInt32(Ready["IdUsuario"]),
                 Vendedor = Convert.ToString(Ready["Vendedor"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
-                FechaCancelacion = Convert.ToDateTime(Ready["FechaCancelacion"]),
+                FechaCancelacion = Ready["FechaCancelacion"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(Ready["FechaCancelacion"]),
                 PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
             };
         }
@@ -42,6 +42,23 @@ namespace Borboletas.AccesoDatos
                 MontoTotal = Convert.ToDouble(Ready["Total"]),
                 Abono = Convert.ToDouble(Ready["Abono"]),
                 FechaAbono = Convert.ToDateTime(Ready["FechaRegistro"]),
+            };
+        }
+
+        private HistorialComprasXIdCliente CargaHistorialComprasXIdCliente(IDataReader Ready)
+        {
+            return new HistorialComprasXIdCliente
+            {
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                IdCuenta = Convert.ToInt32(Ready["IdCuenta"]),
+                FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
+                Articulos = Convert.ToString(Ready["Articulos"]),
+                MontoTotal = Convert.ToDouble(Ready["Total"]),
+                SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
+                FechaCancelacion = Convert.ToDateTime(Ready["FechaCancelacion"]),
+                IdTipoVenta = Convert.ToInt32(Ready["IdTipoVenta"]),
+                IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
+                TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
             };
         }
         #endregion Metodos Carga de Datos
@@ -106,6 +123,39 @@ namespace Borboletas.AccesoDatos
                 conexion.Close();
 
                 return HistorialAbonos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialComprasXIdCliente> HistorialComprasXIdCliente(int IdCliente)
+        {
+            List<HistorialComprasXIdCliente> HistorialCompras = new List<HistorialComprasXIdCliente>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerHistorialComprasXIdCliente";
+                cmd.Parameters.AddWithValue("@IdCliente", IdCliente);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    HistorialCompras.Add(CargaHistorialComprasXIdCliente(DsReader));
+                }
+
+                conexion.Close();
+
+                return HistorialCompras;
             }
             catch (Exception ex)
             {

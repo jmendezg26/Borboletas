@@ -35,6 +35,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<HistorialComprasXIdCliente> HistorialComprasXIdCliente(int IdCliente)
+        {
+            List<HistorialComprasXIdCliente> HistorialCompras = new List<HistorialComprasXIdCliente>();
+
+            try
+            {
+                return HistorialCompras = _VentasAD.HistorialComprasXIdCliente(IdCliente);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
