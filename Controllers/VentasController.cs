@@ -11,6 +11,7 @@ namespace Borboletas.Controllers
     public class VentasController : Controller
     {
         private readonly TiendasLN _TiendasLN = new TiendasLN();
+        private readonly VentasLN _VentasLN = new VentasLN();
 
         #region Metodos Obtener
 
@@ -40,6 +41,85 @@ namespace Borboletas.Controllers
                 return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
             }
         }
+
+        [HttpGet("ObtenerVentas")]
+        public IActionResult ObtenerVentas()
+        {
+            List<ListarVentas> ListaDeVentas = new List<ListarVentas>();
+            try
+            {
+                ListaDeVentas = _VentasLN.ObtenerVentas();
+
+                if (ListaDeVentas.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ListaDeVentas, success = true }));
+                }
+                else if (ListaDeVentas.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay ventas registradas", success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener la lista de ventas", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
         #endregion Metodos Obtener
+
+        #region Metodos Insertar
+        [HttpPost("InsertarVenta")]
+        public async Task<IActionResult> InsertarVenta([FromBody] NuevaVenta LaVenta)
+        {
+            int Venta = 0;
+            int Abono = 0;
+            try
+            {
+                Venta = _VentasLN.AgregarVenta(LaVenta);
+
+                if (Venta != 0)
+                {
+                    if (LaVenta.AbonoInicial > 0)
+                    {
+                        NuevoAbono ElAbono = new NuevoAbono()
+                        {
+                            IdCuenta = Venta,
+                            Abono = LaVenta.AbonoInicial,
+                            SaldoAnterior = LaVenta.Total,
+                            NuevoSaldo = LaVenta.Total - LaVenta.AbonoInicial,
+                            IdUsuario = LaVenta.IdUsuario,
+                        };
+
+                        Abono = _VentasLN.AgregarAbono(ElAbono);
+
+                        if (Abono != 0)
+                        {
+                            return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = LaVenta, success = true }));
+
+                        }
+                        else
+                        {
+                            return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "Se agrego la venta, pero no el abono inicial", success = false }));
+                        }
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = LaVenta, success = true }));
+                    }
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo crear la venta", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+        #endregion Metodos Insertar
     }
 }
