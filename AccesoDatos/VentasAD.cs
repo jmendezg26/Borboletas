@@ -1,6 +1,7 @@
 ﻿using Borboletas.Entidades;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace Borboletas.AccesoDatos
 {
@@ -28,6 +29,19 @@ namespace Borboletas.AccesoDatos
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
                 FechaCancelacion = Convert.ToDateTime(Ready["FechaCancelacion"]),
                 PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
+            };
+        }
+
+        private HistorialAbonosXIdCliente CargaHistorialAbonosXIdCliente(IDataReader Ready)
+        {
+            return new HistorialAbonosXIdCliente
+            {
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                IdCuenta = Convert.ToInt32(Ready["IdCuenta"]),
+                SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
+                MontoTotal = Convert.ToDouble(Ready["Total"]),
+                Abono = Convert.ToDouble(Ready["Abono"]),
+                FechaAbono = Convert.ToDateTime(Ready["FechaRegistro"]),
             };
         }
         #endregion Metodos Carga de Datos
@@ -64,12 +78,51 @@ namespace Borboletas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<HistorialAbonosXIdCliente> HistorialAbonosXIdClienteIdCuenta(int IdCliente, int IdCuenta)
+        {
+            List<HistorialAbonosXIdCliente> HistorialAbonos = new List<HistorialAbonosXIdCliente>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerHistorialAbonosXIdCliente";
+                cmd.Parameters.AddWithValue("@IdCliente", IdCliente);
+                cmd.Parameters.AddWithValue("@IdCuenta", IdCuenta);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    HistorialAbonos.Add(CargaHistorialAbonosXIdCliente(DsReader));
+                }
+
+                conexion.Close();
+
+                return HistorialAbonos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
         public int AgregarVenta(NuevaVenta LaVenta)
         {
             int Venta = 0;
+
+            if (LaVenta.FechaCancelacion == DateTime.MinValue)
+            {
+                LaVenta.FechaCancelacion = null;
+            }
 
             try
             {
@@ -89,7 +142,8 @@ namespace Borboletas.AccesoDatos
                 cmd.Parameters.AddWithValue("@FechaVenta", LaVenta.FechaVenta);
                 cmd.Parameters.AddWithValue("@IdUsuario", LaVenta.IdUsuario);
                 cmd.Parameters.AddWithValue("@TipoMoneda", LaVenta.TipoMoneda);
-                cmd.Parameters.AddWithValue("@FechaCancelacion", LaVenta.FechaCancelacion);
+                cmd.Parameters.AddWithValue("@FechaCancelacion", LaVenta.FechaCancelacion ?? (object)DBNull.Value);
+
                 cmd.Parameters.AddWithValue("@PesoTotal", LaVenta.PesoTotal);
 
 
@@ -124,7 +178,7 @@ namespace Borboletas.AccesoDatos
                 cmd.Connection = conexion;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "PA_InsertarAbono";
-                cmd.Parameters.AddWithValue("@IdCliente", ElAbono.IdCuenta);
+                cmd.Parameters.AddWithValue("@IdCuenta", ElAbono.IdCuenta);
                 cmd.Parameters.AddWithValue("@Abono", ElAbono.Abono);
                 cmd.Parameters.AddWithValue("@SaldoAnterior", ElAbono.SaldoAnterior);
                 cmd.Parameters.AddWithValue("@NuevoSaldo", ElAbono.NuevoSaldo);
@@ -145,6 +199,77 @@ namespace Borboletas.AccesoDatos
 
             return Resultado;
         }
+
+        public int AgregarCuentaXCobrar(NuevaCuentaXCobrar LaCuenta)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarCuentaXCobrar";
+                cmd.Parameters.AddWithValue("@IdVenta", LaCuenta.IdVenta);
+                cmd.Parameters.AddWithValue("@SaldoPendiente", LaCuenta.SaldoPendiente);
+
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
         #endregion Metodos Insertar
+
+        #region Metodos Editar
+        public int EditarCuentaXCobrar(EditarCuentaXCobrar LaCuenta)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ModificarCuentaXCobrar";
+                cmd.Parameters.AddWithValue("@IdCuenta", LaCuenta.IdCuenta);
+                cmd.Parameters.AddWithValue("@SaldoPendiente", LaCuenta.NuevoSaldo);
+                cmd.Parameters.AddWithValue("@IdEstado", LaCuenta.IdEstado);
+
+                cmd.Parameters.Add("@Resultado", SqlDbType.BigInt);
+                cmd.Parameters["@Resultado"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@Resultado"].Value);
+
+                conexion.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+        #endregion Metodos Editar
     }
 }

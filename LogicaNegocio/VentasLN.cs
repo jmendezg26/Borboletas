@@ -21,6 +21,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<HistorialAbonosXIdCliente> HistorialAbonosXIdClienteIdCuenta(int IdCliente, int IdCuenta)
+        {
+            List<HistorialAbonosXIdCliente> HistorialAbonos = new List<HistorialAbonosXIdCliente>();
+
+            try
+            {
+                return HistorialAbonos = _VentasAD.HistorialAbonosXIdClienteIdCuenta(IdCliente, IdCuenta);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -55,6 +69,40 @@ namespace Borboletas.LogicaNegocio
 
             return Abono;
         }
+
+        public int AgregarCuentaXCobrar(NuevaCuentaXCobrar LaCuenta)
+        {
+            int Abono = 0;
+
+            try
+            {
+                Abono = _VentasAD.AgregarCuentaXCobrar(LaCuenta);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Abono;
+        }
         #endregion Metodos Insertar
+
+        #region Metodos Editar
+        public int EditarCuentaXCobrar(EditarCuentaXCobrar LaCuenta)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                Resultado = _VentasAD.EditarCuentaXCobrar(LaCuenta);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
+        }
+        #endregion Metodos Editar
     }
 }
