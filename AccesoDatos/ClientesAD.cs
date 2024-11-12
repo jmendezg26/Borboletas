@@ -70,6 +70,11 @@ namespace Borboletas.AccesoDatos
         {
             int Resultado = 0;
 
+            if (ElCliente.FechaNacimiento == DateTime.MinValue)
+            {
+                ElCliente.FechaNacimiento = null;
+            }
+
             try
             {
                 using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
@@ -88,10 +93,8 @@ namespace Borboletas.AccesoDatos
                 cmd.Parameters.AddWithValue("@Canton", string.IsNullOrEmpty(ElCliente.Canton) ? (object)DBNull.Value : ElCliente.Canton);
                 cmd.Parameters.AddWithValue("@Distrito", string.IsNullOrEmpty(ElCliente.Distrito) ? (object)DBNull.Value : ElCliente.Distrito);
                 cmd.Parameters.AddWithValue("@Direccion", ElCliente.Direccion);
-                cmd.Parameters.AddWithValue("@FechaNacimiento",
-                    ElCliente.FechaNacimiento == null || ElCliente.FechaNacimiento == DateTime.MinValue
-                    ? (object)DBNull.Value
-                    : ElCliente.FechaNacimiento);
+                cmd.Parameters.AddWithValue("@FechaNacimiento", ElCliente.FechaNacimiento ?? (object)DBNull.Value);
+
                 cmd.Parameters.AddWithValue("@Informacion", string.IsNullOrEmpty(ElCliente.Detalles) ? (object)DBNull.Value : ElCliente.Detalles);
 
 

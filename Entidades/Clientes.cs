@@ -28,7 +28,7 @@
         public string Distrito { get; set; }
         public string Direccion { get; set; }
         public int IdEstado { get; set; }
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public string Detalles { get; set; }
     }
 
