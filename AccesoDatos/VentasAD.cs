@@ -61,6 +61,17 @@ namespace Borboletas.AccesoDatos
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
             };
         }
+
+        private HistorialComprasTiendas CargaHistorialComprasTiendas(IDataReader Ready)
+        {
+            return new HistorialComprasTiendas
+            {
+                FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
+                Tienda = Convert.ToString(Ready["Tienda"]),
+                Articulo = Convert.ToString(Ready["Articulo"]),
+                Cliente = Convert.ToString(Ready["Cliente"]),
+            };
+        }
         #endregion Metodos Carga de Datos
 
         #region Metodos Obtener
@@ -151,6 +162,38 @@ namespace Borboletas.AccesoDatos
                 while (DsReader.Read())
                 {
                     HistorialCompras.Add(CargaHistorialComprasXIdCliente(DsReader));
+                }
+
+                conexion.Close();
+
+                return HistorialCompras;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialComprasTiendas> ObtenerHistorialComprasTiendas()
+        {
+            List<HistorialComprasTiendas> HistorialCompras = new List<HistorialComprasTiendas>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerTiendasCompras";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    HistorialCompras.Add(CargaHistorialComprasTiendas(DsReader));
                 }
 
                 conexion.Close();

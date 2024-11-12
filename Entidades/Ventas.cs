@@ -117,4 +117,12 @@
         public int TipoMoneda { get; set; }
     }
 
+    public class HistorialComprasTiendas
+    {
+        public DateTime FechaVenta { get; set; }
+        public string Tienda { get; set; }
+        public string Articulo { get; set; }
+        public string Cliente { get; set; }
+    }
+
 }

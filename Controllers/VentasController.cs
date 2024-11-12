@@ -122,6 +122,35 @@ namespace Borboletas.Controllers
                 return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
             }
         }
+
+        [HttpGet("HistorialComprasTiendas")]
+        public IActionResult HistorialComprasTiendas()
+        {
+            List<HistorialComprasTiendas> HistorialCompras = new List<HistorialComprasTiendas>();
+            try
+            {
+                HistorialCompras = _VentasLN.ObtenerHistorialComprasTiendas();
+
+                if (HistorialCompras.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = HistorialCompras, success = true }));
+                }
+                else if (HistorialCompras.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay compras registradas", success = false }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener el historial de abonos", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+
+
         #endregion Metodos Obtener
 
         #region Metodos Insertar
