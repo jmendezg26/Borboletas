@@ -120,6 +120,30 @@ namespace Borboletas.Controllers
                 return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
             }
         }
+
+        [HttpPost("InsertarAbono")]
+        public async Task<IActionResult> InsertarAbono([FromBody] NuevoAbono ElAbono)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                Resultado = _VentasLN.AgregarAbono(ElAbono);
+
+                if (Resultado != 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ElAbono, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo insertar el abono", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
         #endregion Metodos Insertar
     }
 }
