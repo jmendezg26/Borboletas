@@ -63,6 +63,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<DetalleVenta> DetallesDeVenta(int IdVenta)
+        {
+            List<DetalleVenta> DetallesVenta = new List<DetalleVenta>();
+
+            try
+            {
+                return DetallesVenta = _VentasAD.DetallesDeVenta(IdVenta);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -113,6 +127,19 @@ namespace Borboletas.LogicaNegocio
 
             return Abono;
         }
+
+        public void InsertarArticuloVenta(ArticulosDeVenta ElProducto)
+        {
+            try
+            {
+                _VentasAD.InsertarArticuloVenta(ElProducto);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         #endregion Metodos Insertar
 
         #region Metodos Editar

@@ -72,6 +72,18 @@ namespace Borboletas.AccesoDatos
                 Cliente = Convert.ToString(Ready["Cliente"]),
             };
         }
+
+        private DetalleVenta CargaDetalleVentas(IDataReader Ready)
+        {
+            return new DetalleVenta
+            {
+                Articulo = Convert.ToString(Ready["Articulo"]),
+                Tienda = Convert.ToString(Ready["Nombre"]),
+                Peso = Convert.ToDouble(Ready["Peso"]),
+                Cantidad = Convert.ToInt32(Ready["Cantidad"]),
+                Precio = Convert.ToInt32(Ready["Precio"]),
+            };
+        }
         #endregion Metodos Carga de Datos
 
         #region Metodos Obtener
@@ -205,6 +217,39 @@ namespace Borboletas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<DetalleVenta> DetallesDeVenta(int IdVenta)
+        {
+            List<DetalleVenta> DetallesVenta = new List<DetalleVenta>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerDetalleVenta";
+                cmd.Parameters.AddWithValue("@IdVenta", IdVenta);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    DetallesVenta.Add(CargaDetalleVentas(DsReader));
+                }
+
+                conexion.Close();
+
+                return DetallesVenta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -326,6 +371,35 @@ namespace Borboletas.AccesoDatos
             }
 
             return Resultado;
+        }
+
+        public void InsertarArticuloVenta(ArticulosDeVenta ElProducto)
+        {
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarArticulosVenta";
+                cmd.Parameters.AddWithValue("@IdVenta", ElProducto.IdVenta);
+                cmd.Parameters.AddWithValue("@Articulo", ElProducto.Articulo);
+                cmd.Parameters.AddWithValue("@IdTienda", ElProducto.IdTienda);
+                cmd.Parameters.AddWithValue("@Peso", ElProducto.Peso);
+                cmd.Parameters.AddWithValue("@Precio", ElProducto.Precio);
+                cmd.Parameters.AddWithValue("@Cantidad", ElProducto.Cantidad);
+
+                cmd.ExecuteNonQuery();
+
+                conexion.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
         #endregion Metodos Insertar
 

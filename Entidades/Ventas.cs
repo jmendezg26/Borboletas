@@ -36,7 +36,7 @@
         public double AbonoInicial { get; set; }
         public int IdCliente { get; set; }
         public int IdTipoVenta { get; set; }
-        //public List<ArticulosDeVenta> ListaArticulo {  get; set; }
+        public List<ArticulosDeVenta> ListaArticulo {  get; set; }
 
     }
 
@@ -91,6 +91,7 @@
         public int IdTienda { get; set; }
         public double Peso { get; set; }
         public int Cantidad { get; set; }
+        public double Precio { get; set; }
     }
 
     public class HistorialAbonosXIdCliente
@@ -123,6 +124,15 @@
         public string Tienda { get; set; }
         public string Articulo { get; set; }
         public string Cliente { get; set; }
+    }
+
+    public class DetalleVenta
+    {
+        public string Articulo { get; set; }
+        public string Tienda { get; set; }
+        public double Peso { get; set; }
+        public double Precio { get; set; }
+        public int Cantidad { get; set; }
     }
 
 }

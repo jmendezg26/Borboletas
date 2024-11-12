@@ -151,6 +151,33 @@ namespace Borboletas.Controllers
         }
 
 
+        [HttpGet("ObtenerDetallesVenta")]
+        public IActionResult ObtenerDetallesVenta(int IdVenta)
+        {
+            List<DetalleVenta> DetallesVenta = new List<DetalleVenta>();
+            try
+            {
+                DetallesVenta = _VentasLN.DetallesDeVenta(IdVenta);
+
+                if (DetallesVenta.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = DetallesVenta, success = true }));
+                }
+                else if (DetallesVenta.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay compras registradas", success = false }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener el historial de abonos", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -246,6 +273,21 @@ namespace Borboletas.Controllers
 
                 if (Venta != 0)
                 {
+                    foreach (var item in LaVenta.ListaArticulo)
+                    {
+                        ArticulosDeVenta ElProducto = new ArticulosDeVenta()
+                        {
+                            IdVenta = Venta,
+                            Articulo = item.Articulo,
+                            IdTienda = item.IdTienda,
+                            Peso = item.Peso,
+                            Precio = item.Precio,
+                            Cantidad = item.Cantidad
+                        };
+
+                        InsertarProductos(ElProducto);
+                    }
+
                     if (LaVenta.IdTipoVenta == 2)
                     {
                         NuevaCuentaXCobrar LaCuentaXCobrar = new NuevaCuentaXCobrar();
@@ -392,6 +434,22 @@ namespace Borboletas.Controllers
             }
         }
 
+        public void InsertarProductos(ArticulosDeVenta ElProducto)
+        {
+            try
+            {
+                _VentasLN.InsertarArticuloVenta(ElProducto);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        #endregion Metodos Insertar
+
+        #region Metodos Editar
         public int EditarCuentaXCobrar(EditarCuentaXCobrar LaCuenta)
         {
             int Resultado = 0;
@@ -405,6 +463,6 @@ namespace Borboletas.Controllers
                 throw new Exception(ex.Message);
             }
         }
-        #endregion Metodos Insertar
+        #endregion Metodos Editar
     }
 }
