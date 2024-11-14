@@ -77,6 +77,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<HistorialCuentasXCobrar> HistorialCuentasXCobrar()
+        {
+            List<HistorialCuentasXCobrar> CuentasXCobrar = new List<HistorialCuentasXCobrar>();
+
+            try
+            {
+                return CuentasXCobrar = _VentasAD.HistorialCuentasXCobrar();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar

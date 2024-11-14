@@ -84,6 +84,26 @@ namespace Borboletas.AccesoDatos
                 Precio = Convert.ToInt32(Ready["Precio"]),
             };
         }
+
+        private HistorialCuentasXCobrar CargaCuentasXCobrar(IDataReader Ready)
+        {
+            return new HistorialCuentasXCobrar
+            {
+                IdCuenta = Convert.ToInt32(Ready["IdCuenta"]),
+                IdVenta = Convert.ToInt32(Ready["IdVenta"]),
+                SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
+                IdEstado = Convert.ToInt32(Ready["IdEstado"]),
+                Informacion = Convert.ToString(Ready["Informacion"]),
+                TotalVenta = Convert.ToInt32(Ready["Total"]),
+                FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
+                Vendedor = Convert.ToString(Ready["Vendedor"]),
+                TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
+                FechaCancelacion = Convert.ToDateTime(Ready["FechaCancelacion"]),
+                PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                Cliente = Convert.ToString(Ready["Nombre"]),
+            };
+        }
         #endregion Metodos Carga de Datos
 
         #region Metodos Obtener
@@ -244,6 +264,38 @@ namespace Borboletas.AccesoDatos
                 conexion.Close();
 
                 return DetallesVenta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialCuentasXCobrar> HistorialCuentasXCobrar()
+        {
+            List<HistorialCuentasXCobrar> CuentasXCobrar = new List<HistorialCuentasXCobrar>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerCuentasXCobrar";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    CuentasXCobrar.Add(CargaCuentasXCobrar(DsReader));
+                }
+
+                conexion.Close();
+
+                return CuentasXCobrar;
             }
             catch (Exception ex)
             {

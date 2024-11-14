@@ -178,6 +178,32 @@ namespace Borboletas.Controllers
             }
         }
 
+        [HttpGet("ObtenerCuentasXCobrar")]
+        public IActionResult HistorialCuentasXCobrar()
+        {
+            List<HistorialCuentasXCobrar> CuentasXCobrar = new List<HistorialCuentasXCobrar>();
+            try
+            {
+                CuentasXCobrar = _VentasLN.HistorialCuentasXCobrar();
+
+                if (CuentasXCobrar.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = CuentasXCobrar, success = true }));
+                }
+                else if (CuentasXCobrar.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay compras registradas", success = false }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener el historial de abonos", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
