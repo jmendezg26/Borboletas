@@ -102,6 +102,7 @@ namespace Borboletas.AccesoDatos
                 PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
                 IdCliente = Convert.ToInt32(Ready["IdCliente"]),
                 Cliente = Convert.ToString(Ready["Nombre"]),
+                Articulos = Convert.ToString(Ready["Articulos"])
             };
         }
         #endregion Metodos Carga de Datos

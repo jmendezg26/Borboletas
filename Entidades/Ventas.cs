@@ -150,6 +150,7 @@
         public double PesoTotal { get; set; }
         public int IdCliente { get; set; }
         public string Cliente { get; set; }
+        public string Articulos { get; set; }
 
     }
 
