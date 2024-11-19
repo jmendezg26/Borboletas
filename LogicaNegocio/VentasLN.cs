@@ -50,6 +50,20 @@ namespace Borboletas.LogicaNegocio
             }
         }
 
+        public List<HistorialComprasGeneral> HistorialComprasGeneral()
+        {
+            List<HistorialComprasGeneral> HistorialCompras = new List<HistorialComprasGeneral>();
+
+            try
+            {
+                return HistorialCompras = _VentasAD.HistorialComprasGeneral();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<HistorialComprasTiendas> ObtenerHistorialComprasTiendas()
         {
             List<HistorialComprasTiendas> HistorialCompras = new List<HistorialComprasTiendas>();

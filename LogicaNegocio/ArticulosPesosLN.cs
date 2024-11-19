@@ -3,18 +3,18 @@ using Borboletas.Entidades;
 
 namespace Borboletas.LogicaNegocio
 {
-    public class TiendasLN
+    public class ArticulosPesosLN
     {
-        private readonly TiendasAD _TiendasAD = new TiendasAD();
+        private readonly ArticulosPesosAD _ArticulosPesosAD = new ArticulosPesosAD();
 
         #region Metodos Obtener
-        public List<Tiendas> ObtenerTiendas()
+        public List<ArticulosPesos> ObtenerCatalogoArticulos()
         {
-            List<Tiendas> ListaTiendas = new List<Tiendas>();
+            List<ArticulosPesos> ListaArticulos = new List<ArticulosPesos>();
 
             try
             {
-                return ListaTiendas = _TiendasAD.ObtenerTiendas();
+                return ListaArticulos = _ArticulosPesosAD.ObtenerCatalogoArticulos();
             }
             catch (Exception ex)
             {
@@ -23,14 +23,14 @@ namespace Borboletas.LogicaNegocio
         }
         #endregion Metodos Obtener
 
-        #region Metodos Insertar
-        public int AgregarTienda(Tiendas LaTienda)
+        #region Metodos Insertar/Crear
+        public int AgregarArticuloCatalogo(ArticulosPesos ElArticulo)
         {
             int Resultado = 0;
 
             try
             {
-                Resultado = _TiendasAD.AgregarTienda(LaTienda);
+                Resultado = _ArticulosPesosAD.AgregarArticuloCatalogo(ElArticulo);
             }
             catch (Exception ex)
             {
@@ -39,16 +39,16 @@ namespace Borboletas.LogicaNegocio
 
             return Resultado;
         }
-        #endregion Metodos Insertar
+        #endregion Metodos Insertar/Crear
 
         #region Metodos Editar
-        public int EditarTienda(Tiendas LaTienda)
+        public int EditarArticulo(ArticulosPesos ElArticulo)
         {
             int Resultado = 0;
 
             try
             {
-                Resultado = _TiendasAD.EditarTienda(LaTienda);
+                Resultado = _ArticulosPesosAD.EditarArticulo(ElArticulo);
             }
             catch (Exception ex)
             {
@@ -57,6 +57,7 @@ namespace Borboletas.LogicaNegocio
 
             return Resultado;
         }
+
         #endregion Metodos Editar
     }
 }

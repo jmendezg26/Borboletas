@@ -60,6 +60,6 @@ namespace Borboletas.LogicaNegocio
             return Resultado;
         }
 
-            #endregion Metodos Editar
-        }
+        #endregion Metodos Editar
+    }
 }

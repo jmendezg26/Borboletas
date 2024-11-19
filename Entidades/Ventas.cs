@@ -118,6 +118,20 @@
         public int TipoMoneda { get; set; }
     }
 
+    public class HistorialComprasGeneral
+    {
+        public int IdCliente { get; set; }
+        public int IdCuenta { get; set; }
+        public DateTime FechaVenta { get; set; }
+        public string Articulos { get; set; }
+        public double MontoTotal { get; set; }
+        public double SaldoPendiente { get; set; }
+        public DateTime? FechaCancelacion { get; set; }
+        public int IdTipoVenta { get; set; }
+        public int IdEstadoVenta { get; set; }
+        public int TipoMoneda { get; set; }
+    }
+
     public class HistorialComprasTiendas
     {
         public DateTime FechaVenta { get; set; }

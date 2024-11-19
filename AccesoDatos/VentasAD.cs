@@ -62,6 +62,23 @@ namespace Borboletas.AccesoDatos
             };
         }
 
+        private HistorialComprasGeneral CargaHistorialComprasGeneral(IDataReader Ready)
+        {
+            return new HistorialComprasGeneral
+            {
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                IdCuenta = Convert.ToInt32(Ready["IdCuenta"]),
+                FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
+                Articulos = Convert.ToString(Ready["Articulos"]),
+                MontoTotal = Convert.ToDouble(Ready["Total"]),
+                SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
+                FechaCancelacion = Ready["FechaCancelacion"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(Ready["FechaCancelacion"]),
+                IdTipoVenta = Convert.ToInt32(Ready["IdTipoVenta"]),
+                IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
+                TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
+            };
+        }
+
         private HistorialComprasTiendas CargaHistorialComprasTiendas(IDataReader Ready)
         {
             return new HistorialComprasTiendas
@@ -195,6 +212,38 @@ namespace Borboletas.AccesoDatos
                 while (DsReader.Read())
                 {
                     HistorialCompras.Add(CargaHistorialComprasXIdCliente(DsReader));
+                }
+
+                conexion.Close();
+
+                return HistorialCompras;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialComprasGeneral> HistorialComprasGeneral()
+        {
+            List<HistorialComprasGeneral> HistorialCompras = new List<HistorialComprasGeneral>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerHistorialComprasGeneral";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    HistorialCompras.Add(CargaHistorialComprasGeneral(DsReader));
                 }
 
                 conexion.Close();
