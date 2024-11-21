@@ -23,6 +23,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<Clientes> ObtenerTodosLosClientes()
+        {
+            List<Clientes> ListaClientes = new List<Clientes>();
+
+            try
+            {
+                return ListaClientes = _ClientesAD.ObtenerTodosLosClientes();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar/Crear
