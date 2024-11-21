@@ -21,6 +21,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<Tiendas> ObtenerTiendasEstados()
+        {
+            List<Tiendas> ListaTiendas = new List<Tiendas>();
+
+            try
+            {
+                return ListaTiendas = _TiendasAD.ObtenerTiendasEstados();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
