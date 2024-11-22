@@ -50,6 +50,20 @@ namespace Borboletas.LogicaNegocio
             }
         }
 
+        public List<HistorialComprasGeneral> HistorialComprasGeneral()
+        {
+            List<HistorialComprasGeneral> HistorialCompras = new List<HistorialComprasGeneral>();
+
+            try
+            {
+                return HistorialCompras = _VentasAD.HistorialComprasGeneral();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<HistorialComprasTiendas> ObtenerHistorialComprasTiendas()
         {
             List<HistorialComprasTiendas> HistorialCompras = new List<HistorialComprasTiendas>();
@@ -71,6 +85,20 @@ namespace Borboletas.LogicaNegocio
             try
             {
                 return DetallesVenta = _VentasAD.DetallesDeVenta(IdVenta);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialCuentasXCobrar> HistorialCuentasXCobrar()
+        {
+            List<HistorialCuentasXCobrar> CuentasXCobrar = new List<HistorialCuentasXCobrar>();
+
+            try
+            {
+                return CuentasXCobrar = _VentasAD.HistorialCuentasXCobrar();
             }
             catch (Exception ex)
             {

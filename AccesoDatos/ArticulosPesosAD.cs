@@ -4,26 +4,27 @@ using System.Data.SqlClient;
 
 namespace Borboletas.AccesoDatos
 {
-    public class TiendasAD
+    public class ArticulosPesosAD
     {
         private readonly BDConexion _BDConnection = new BDConexion();
 
-        #region Carga de Datos
-        private Tiendas CargaTiendas(IDataReader Ready)
+        #region CargaDatos
+        private ArticulosPesos CargaArticulosPesos(IDataReader Ready)
         {
-            return new Tiendas
+            return new ArticulosPesos
             {
-                IdTienda = Convert.ToInt32(Ready["IdTienda"]),
-                Nombre = Convert.ToString(Ready["Nombre"]),
-                IdEstado = Convert.ToInt32(Ready["IdEstado"]),
+                IdArticulo = Convert.ToInt32(Ready["IdArticulo"]),
+                Articulo = Convert.ToString(Ready["Articulo"]),
+                Peso = Convert.ToDouble(Ready["Peso"]),
+                Link = Convert.ToString(Ready["Link"]),
             };
         }
-        #endregion Carga de Datos
+        #endregion CargaDatos
 
         #region Metodos Obtener
-        public List<Tiendas> ObtenerTiendas()
+        public List<ArticulosPesos> ObtenerCatalogoArticulos()
         {
-            List<Tiendas> ListaTiendas = new List<Tiendas>();
+            List<ArticulosPesos> ListaArticulos = new List<ArticulosPesos>();
 
             try
             {
@@ -34,50 +35,18 @@ namespace Borboletas.AccesoDatos
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conexion;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "PA_ObtenerTiendas";
+                cmd.CommandText = "PA_ObtenerArticulosPesos";
 
                 SqlDataReader DsReader = cmd.ExecuteReader();
 
                 while (DsReader.Read())
                 {
-                    ListaTiendas.Add(CargaTiendas(DsReader));
+                    ListaArticulos.Add(CargaArticulosPesos(DsReader));
                 }
 
                 conexion.Close();
 
-                return ListaTiendas;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public List<Tiendas> ObtenerTiendasEstados()
-        {
-            List<Tiendas> ListaTiendas = new List<Tiendas>();
-
-            try
-            {
-                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
-
-                conexion.Open();
-
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conexion;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "PA_ObtenerTiendasEstados";
-
-                SqlDataReader DsReader = cmd.ExecuteReader();
-
-                while (DsReader.Read())
-                {
-                    ListaTiendas.Add(CargaTiendas(DsReader));
-                }
-
-                conexion.Close();
-
-                return ListaTiendas;
+                return ListaArticulos;
             }
             catch (Exception ex)
             {
@@ -86,9 +55,8 @@ namespace Borboletas.AccesoDatos
         }
         #endregion Metodos Obtener
 
-
-        #region Metodos Crear/Insertar
-        public int AgregarTienda(Tiendas LaTienda)
+        #region Metodos Insertar
+        public int AgregarArticuloCatalogo(ArticulosPesos ElArticulo)
         {
             int Resultado = 0;
 
@@ -101,8 +69,11 @@ namespace Borboletas.AccesoDatos
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conexion;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "PA_InsertarTienda";
-                cmd.Parameters.AddWithValue("@Tienda", LaTienda.Nombre);
+                cmd.CommandText = "PA_InsertarArticuloPeso";
+                cmd.Parameters.AddWithValue("@Articulo", ElArticulo.Articulo);
+                cmd.Parameters.AddWithValue("@Peso", ElArticulo.Peso);
+                cmd.Parameters.AddWithValue("@Link", string.IsNullOrEmpty(ElArticulo.Link) ? (object)DBNull.Value : ElArticulo.Link);
+
 
                 cmd.Parameters.Add("@ID", SqlDbType.BigInt);
                 cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
@@ -119,12 +90,10 @@ namespace Borboletas.AccesoDatos
 
             return Resultado;
         }
-     
-
-        #endregion Metodos Crear/Insertar
+        #endregion Metodos Insertar
 
         #region Metodos Editar
-        public int EditarTienda(Tiendas LaTienda)
+        public int EditarArticulo(ArticulosPesos ElArticulo)
         {
             int Resultado = 0;
 
@@ -137,10 +106,11 @@ namespace Borboletas.AccesoDatos
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conexion;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "PA_EditarTienda";
-                cmd.Parameters.AddWithValue("@IdTienda", LaTienda.IdTienda);
-                cmd.Parameters.AddWithValue("@Nombre", LaTienda.Nombre);
-                cmd.Parameters.AddWithValue("@IdEstado", LaTienda.IdEstado);
+                cmd.CommandText = "PA_EditarArticuloPeso";
+                cmd.Parameters.AddWithValue("@IdArticulo", ElArticulo.IdArticulo);
+                cmd.Parameters.AddWithValue("@Articulo", ElArticulo.Articulo);
+                cmd.Parameters.AddWithValue("@Peso", ElArticulo.Peso);
+                cmd.Parameters.AddWithValue("@Link", string.IsNullOrEmpty(ElArticulo.Link) ? (object)DBNull.Value : ElArticulo.Link);
 
                 cmd.Parameters.Add("@Resultado", SqlDbType.BigInt);
                 cmd.Parameters["@Resultado"].Direction = ParameterDirection.Output;
@@ -157,6 +127,7 @@ namespace Borboletas.AccesoDatos
 
             return Resultado;
         }
+
         #endregion Metodos Editar
     }
 }

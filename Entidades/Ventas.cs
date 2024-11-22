@@ -36,7 +36,7 @@
         public double AbonoInicial { get; set; }
         public int IdCliente { get; set; }
         public int IdTipoVenta { get; set; }
-        public List<ArticulosDeVenta> ListaArticulo {  get; set; }
+        public List<ArticulosDeVenta> ListaArticulo { get; set; }
 
     }
 
@@ -109,7 +109,21 @@
         public int IdCliente { get; set; }
         public int IdCuenta { get; set; }
         public DateTime FechaVenta { get; set; }
-        public string Articulos {  get; set; }
+        public string Articulos { get; set; }
+        public double MontoTotal { get; set; }
+        public double SaldoPendiente { get; set; }
+        public DateTime? FechaCancelacion { get; set; }
+        public int IdTipoVenta { get; set; }
+        public int IdEstadoVenta { get; set; }
+        public int TipoMoneda { get; set; }
+    }
+
+    public class HistorialComprasGeneral
+    {
+        public int IdCliente { get; set; }
+        public int IdCuenta { get; set; }
+        public DateTime FechaVenta { get; set; }
+        public string Articulos { get; set; }
         public double MontoTotal { get; set; }
         public double SaldoPendiente { get; set; }
         public DateTime? FechaCancelacion { get; set; }
@@ -133,6 +147,25 @@
         public double Peso { get; set; }
         public double Precio { get; set; }
         public int Cantidad { get; set; }
+    }
+
+    public class HistorialCuentasXCobrar
+    {
+        public int IdCuenta { get; set; }
+        public int IdVenta { get; set; }
+        public double SaldoPendiente { get; set; }
+        public int IdEstado { get; set; }
+        public string Informacion { get; set; }
+        public double TotalVenta { get; set; }
+        public DateTime FechaVenta { get; set; }
+        public string Vendedor { get; set; }
+        public int TipoMoneda { get; set; }
+        public DateTime FechaCancelacion { get; set; }
+        public double PesoTotal { get; set; }
+        public int IdCliente { get; set; }
+        public string Cliente { get; set; }
+        public string Articulos { get; set; }
+
     }
 
 }

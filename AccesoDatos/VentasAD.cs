@@ -62,6 +62,23 @@ namespace Borboletas.AccesoDatos
             };
         }
 
+        private HistorialComprasGeneral CargaHistorialComprasGeneral(IDataReader Ready)
+        {
+            return new HistorialComprasGeneral
+            {
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                IdCuenta = Convert.ToInt32(Ready["IdCuenta"]),
+                FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
+                Articulos = Convert.ToString(Ready["Articulos"]),
+                MontoTotal = Convert.ToDouble(Ready["Total"]),
+                SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
+                FechaCancelacion = Ready["FechaCancelacion"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(Ready["FechaCancelacion"]),
+                IdTipoVenta = Convert.ToInt32(Ready["IdTipoVenta"]),
+                IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
+                TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
+            };
+        }
+
         private HistorialComprasTiendas CargaHistorialComprasTiendas(IDataReader Ready)
         {
             return new HistorialComprasTiendas
@@ -82,6 +99,27 @@ namespace Borboletas.AccesoDatos
                 Peso = Convert.ToDouble(Ready["Peso"]),
                 Cantidad = Convert.ToInt32(Ready["Cantidad"]),
                 Precio = Convert.ToInt32(Ready["Precio"]),
+            };
+        }
+
+        private HistorialCuentasXCobrar CargaCuentasXCobrar(IDataReader Ready)
+        {
+            return new HistorialCuentasXCobrar
+            {
+                IdCuenta = Convert.ToInt32(Ready["IdCuenta"]),
+                IdVenta = Convert.ToInt32(Ready["IdVenta"]),
+                SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
+                IdEstado = Convert.ToInt32(Ready["IdEstado"]),
+                Informacion = Convert.ToString(Ready["Informacion"]),
+                TotalVenta = Convert.ToInt32(Ready["Total"]),
+                FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
+                Vendedor = Convert.ToString(Ready["Vendedor"]),
+                TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
+                FechaCancelacion = Convert.ToDateTime(Ready["FechaCancelacion"]),
+                PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                Cliente = Convert.ToString(Ready["Nombre"]),
+                Articulos = Convert.ToString(Ready["Articulos"])
             };
         }
         #endregion Metodos Carga de Datos
@@ -186,6 +224,38 @@ namespace Borboletas.AccesoDatos
             }
         }
 
+        public List<HistorialComprasGeneral> HistorialComprasGeneral()
+        {
+            List<HistorialComprasGeneral> HistorialCompras = new List<HistorialComprasGeneral>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerHistorialComprasGeneral";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    HistorialCompras.Add(CargaHistorialComprasGeneral(DsReader));
+                }
+
+                conexion.Close();
+
+                return HistorialCompras;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<HistorialComprasTiendas> ObtenerHistorialComprasTiendas()
         {
             List<HistorialComprasTiendas> HistorialCompras = new List<HistorialComprasTiendas>();
@@ -244,6 +314,38 @@ namespace Borboletas.AccesoDatos
                 conexion.Close();
 
                 return DetallesVenta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialCuentasXCobrar> HistorialCuentasXCobrar()
+        {
+            List<HistorialCuentasXCobrar> CuentasXCobrar = new List<HistorialCuentasXCobrar>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerCuentasXCobrar";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    CuentasXCobrar.Add(CargaCuentasXCobrar(DsReader));
+                }
+
+                conexion.Close();
+
+                return CuentasXCobrar;
             }
             catch (Exception ex)
             {

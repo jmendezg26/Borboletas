@@ -1,36 +1,20 @@
 ﻿using Borboletas.AccesoDatos;
 using Borboletas.Entidades;
-using System.Data.SqlClient;
-using System.Data;
 
 namespace Borboletas.LogicaNegocio
 {
-    public class ClientesLN
+    public class ArticulosPesosLN
     {
-        private readonly ClientesAD _ClientesAD = new ClientesAD();
+        private readonly ArticulosPesosAD _ArticulosPesosAD = new ArticulosPesosAD();
 
         #region Metodos Obtener
-        public List<Clientes> ObtenerClientes()
+        public List<ArticulosPesos> ObtenerCatalogoArticulos()
         {
-            List<Clientes> ListaClientes = new List<Clientes>();
+            List<ArticulosPesos> ListaArticulos = new List<ArticulosPesos>();
 
             try
             {
-                return ListaClientes = _ClientesAD.ObtenerClientes();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public List<Clientes> ObtenerTodosLosClientes()
-        {
-            List<Clientes> ListaClientes = new List<Clientes>();
-
-            try
-            {
-                return ListaClientes = _ClientesAD.ObtenerTodosLosClientes();
+                return ListaArticulos = _ArticulosPesosAD.ObtenerCatalogoArticulos();
             }
             catch (Exception ex)
             {
@@ -40,13 +24,13 @@ namespace Borboletas.LogicaNegocio
         #endregion Metodos Obtener
 
         #region Metodos Insertar/Crear
-        public int AgregarCliente(NuevoCliente ElCliente)
+        public int AgregarArticuloCatalogo(ArticulosPesos ElArticulo)
         {
             int Resultado = 0;
 
             try
             {
-                Resultado = _ClientesAD.AgregarCliente(ElCliente);
+                Resultado = _ArticulosPesosAD.AgregarArticuloCatalogo(ElArticulo);
             }
             catch (Exception ex)
             {
@@ -58,13 +42,13 @@ namespace Borboletas.LogicaNegocio
         #endregion Metodos Insertar/Crear
 
         #region Metodos Editar
-        public int EditarCliente(EditarCliente ElCliente)
+        public int EditarArticulo(ArticulosPesos ElArticulo)
         {
             int Resultado = 0;
 
             try
             {
-                Resultado = _ClientesAD.EditarCliente(ElCliente);
+                Resultado = _ArticulosPesosAD.EditarArticulo(ElArticulo);
             }
             catch (Exception ex)
             {

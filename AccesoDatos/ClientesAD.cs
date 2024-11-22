@@ -63,6 +63,38 @@ namespace Borboletas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<Clientes> ObtenerTodosLosClientes()
+        {
+            List<Clientes> ListaClientes = new List<Clientes>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerClientesEstados";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    ListaClientes.Add(CargaClientes(DsReader));
+                }
+
+                conexion.Close();
+
+                return ListaClientes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Crear/Insertar

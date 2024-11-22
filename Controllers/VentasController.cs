@@ -15,33 +15,6 @@ namespace Borboletas.Controllers
 
         #region Metodos Obtener
 
-        [HttpGet("ObtenerTiendas")]
-        public IActionResult ObtenerTiendas()
-        {
-            List<Tiendas> ListaTiendas = new List<Tiendas>();
-            try
-            {
-                ListaTiendas = _TiendasLN.ObtenerTiendas();
-
-                if (ListaTiendas.Count > 0)
-                {
-                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = ListaTiendas, success = true }));
-                }
-                else if (ListaTiendas.Count == 0)
-                {
-                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay tiendas registrados", success = true }));
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener la lista de clientes", success = false }));
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
-            }
-        }
-
         [HttpGet("ObtenerVentas")]
         public IActionResult ObtenerVentas()
         {
@@ -123,6 +96,33 @@ namespace Borboletas.Controllers
             }
         }
 
+        [HttpGet("HistorialComprasGeneral")]
+        public IActionResult HistorialComprasGeneral()
+        {
+            List<HistorialComprasGeneral> HistorialCompras = new List<HistorialComprasGeneral>();
+            try
+            {
+                HistorialCompras = _VentasLN.HistorialComprasGeneral();
+
+                if (HistorialCompras.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = HistorialCompras, success = true }));
+                }
+                else if (HistorialCompras.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay abonos registrados", success = false }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener el historial de abonos", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
+
         [HttpGet("HistorialComprasTiendas")]
         public IActionResult HistorialComprasTiendas()
         {
@@ -178,87 +178,35 @@ namespace Borboletas.Controllers
             }
         }
 
+        [HttpGet("ObtenerCuentasXCobrar")]
+        public IActionResult HistorialCuentasXCobrar()
+        {
+            List<HistorialCuentasXCobrar> CuentasXCobrar = new List<HistorialCuentasXCobrar>();
+            try
+            {
+                CuentasXCobrar = _VentasLN.HistorialCuentasXCobrar();
+
+                if (CuentasXCobrar.Count > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = CuentasXCobrar, success = true }));
+                }
+                else if (CuentasXCobrar.Count == 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No hay compras registradas", success = false }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener el historial de abonos", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
         #endregion Metodos Obtener
 
-        #region Metodos Insertar
-        //[HttpPost("InsertarVenta")]
-        //public async Task<IActionResult> InsertarVenta([FromBody] NuevaVenta LaVenta)
-        //{
-        //    int Venta = 0;
-        //    int Abono = 0;
-        //    int CuentaXCobrar = 0;
-        //    try
-        //    {
-
-        //        Venta = _VentasLN.AgregarVenta(LaVenta);
-
-        //        if (Venta != 0)
-        //        {
-        //            if (LaVenta.IdTipoVenta == 2)
-        //            {
-        //                NuevaCuentaXCobrar LaCuentaXCobrar = new NuevaCuentaXCobrar();
-        //                LaCuentaXCobrar.IdVenta = Venta;
-        //                if (LaVenta.AbonoInicial != 0 && LaVenta.AbonoInicial != null)
-        //                {
-        //                    LaCuentaXCobrar.SaldoPendiente = LaVenta.Total - LaVenta.AbonoInicial;
-        //                }
-        //                else
-        //                {
-        //                    LaCuentaXCobrar.SaldoPendiente = LaVenta.Total;
-        //                }
-
-        //                CuentaXCobrar = _VentasLN.AgregarCuentaXCobrar(LaCuentaXCobrar);
-
-        //                if (CuentaXCobrar > 0)
-        //                {
-        //                    if (LaVenta.AbonoInicial > 0)
-        //                    {
-        //                        NuevoAbono ElAbono = new NuevoAbono()
-        //                        {
-        //                            IdCuenta = CuentaXCobrar,
-        //                            Abono = LaVenta.AbonoInicial,
-        //                            SaldoAnterior = LaVenta.Total,
-        //                            NuevoSaldo = LaVenta.Total - LaVenta.AbonoInicial,
-        //                            IdUsuario = LaVenta.IdUsuario,
-        //                        };
-
-        //                        Abono = _VentasLN.AgregarAbono(ElAbono);
-
-        //                        if (Abono != 0)
-        //                        {
-        //                            return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = LaVenta, success = true }));
-
-        //                        }
-        //                        else
-        //                        {
-        //                            return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "Se agrego la venta y la cuenta por cobrar, pero no el abono inicial", success = false }));
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = LaVenta, success = true }));
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "Se agrego la venta, pero no se creo la cuenta por cobrar", success = false }));
-        //                }
-        //            }
-        //            else
-        //            {
-        //                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = LaVenta, success = true }));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo crear la venta", success = false }));
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
-        //    }
-        //}
+        #region Metodos Insertar     
 
         [HttpPost("InsertarVenta")]
         public async Task<IActionResult> InsertarVenta([FromBody] NuevaVenta LaVenta)
