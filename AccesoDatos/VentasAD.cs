@@ -112,7 +112,7 @@ namespace Borboletas.AccesoDatos
                 SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
                 IdEstado = Convert.ToInt32(Ready["IdEstado"]),
                 Informacion = Convert.ToString(Ready["Informacion"]),
-                TotalVenta = Convert.ToInt32(Ready["Total"]),
+                TotalVenta = Convert.ToDouble(Ready["Total"]),
                 FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
                 Vendedor = Convert.ToString(Ready["Vendedor"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),

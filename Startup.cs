@@ -19,8 +19,13 @@ namespace Borboletas
             services.AddControllers();
 
             services.AddSingleton(_ => Configuration);
-            services.AddCors(options => options.AddPolicy("AllowWebApp", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-
+            services.AddCors(options => options.AddPolicy("AllowWebApp", builder =>
+                builder
+                    .WithOrigins("http://192.168.0.24:83", "http://localhost:83/", "http://localhost:4200/") // URL de tu frontend
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    .AllowCredentials())); // Solo orígenes específicos con credenciales
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,16 +38,18 @@ namespace Borboletas
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseWebSockets();
+
 
             //app.UseAuthorization();
             app.UseCors("AllowWebApp");
+            app.UseRouting();
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseWebSockets();
 
             BDConexion.SetDBConfiguration(Configuration);
         }
