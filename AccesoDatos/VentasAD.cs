@@ -59,6 +59,7 @@ namespace Borboletas.AccesoDatos
                 IdTipoVenta = Convert.ToInt32(Ready["IdTipoVenta"]),
                 IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
+                IdVenta = Convert.ToInt32(Ready["IdVenta"]),
             };
         }
 
@@ -76,6 +77,7 @@ namespace Borboletas.AccesoDatos
                 IdTipoVenta = Convert.ToInt32(Ready["IdTipoVenta"]),
                 IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
+                NombreCliente = Convert.ToString(Ready["Cliente"]),
             };
         }
 
@@ -111,7 +113,7 @@ namespace Borboletas.AccesoDatos
                 SaldoPendiente = Convert.ToDouble(Ready["SaldoPendiente"]),
                 IdEstado = Convert.ToInt32(Ready["IdEstado"]),
                 Informacion = Convert.ToString(Ready["Informacion"]),
-                TotalVenta = Convert.ToInt32(Ready["Total"]),
+                TotalVenta = Convert.ToDouble(Ready["Total"]),
                 FechaVenta = Convert.ToDateTime(Ready["FechaVenta"]),
                 Vendedor = Convert.ToString(Ready["Vendedor"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
