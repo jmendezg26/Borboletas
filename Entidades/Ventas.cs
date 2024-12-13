@@ -168,6 +168,8 @@
         public int IdCliente { get; set; }
         public string Cliente { get; set; }
         public string Articulos { get; set; }
+        public string Telefono { get; set; }
+        public string TelefonoSecundario { get; set; }
 
     }
 

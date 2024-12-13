@@ -21,7 +21,7 @@ namespace Borboletas
             services.AddSingleton(_ => Configuration);
             services.AddCors(options => options.AddPolicy("AllowWebApp", builder =>
                 builder
-                    .WithOrigins("http://192.168.0.24:83", "http://localhost:83", "http://localhost:4200") // URL de tu frontend
+                    .WithOrigins("http://192.168.0.24:83", "http://localhost:83", "http://localhost:4200", "http://localhost:82") // URL de tu frontend
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithMethods("GET", "POST", "PUT", "DELETE")
