@@ -121,7 +121,9 @@ namespace Borboletas.AccesoDatos
                 PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
                 IdCliente = Convert.ToInt32(Ready["IdCliente"]),
                 Cliente = Convert.ToString(Ready["Nombre"]),
-                Articulos = Convert.ToString(Ready["Articulos"])
+                Articulos = Convert.ToString(Ready["Articulos"]),
+                Telefono = Convert.ToString(Ready["Telefono"]),
+                TelefonoSecundario = Convert.ToString(Ready["TelefonoSecundario"]),
             };
         }
 
