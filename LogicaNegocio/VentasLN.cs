@@ -105,6 +105,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<TopVentas> ObtenerTopVentas(string Anno)
+        {
+            List<TopVentas> TopVentas = new List<TopVentas>();
+
+            try
+            {
+                return TopVentas = _VentasAD.ObtenerTopVentas(Anno);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar

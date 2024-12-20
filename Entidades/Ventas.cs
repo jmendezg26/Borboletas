@@ -4,6 +4,15 @@
     {
     }
 
+    public class TopVentas
+    {
+        public int IdCliente { get; set; }
+        public string NombreCliente { get; set; }
+        public string Telefono { get; set; }
+        public int CantidadVentas { get; set; }
+    }
+
+
     public class ListarVentas
     {
         public int IdVenta { get; set; }

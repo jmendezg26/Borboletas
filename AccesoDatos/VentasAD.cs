@@ -124,6 +124,17 @@ namespace Borboletas.AccesoDatos
                 Articulos = Convert.ToString(Ready["Articulos"])
             };
         }
+
+        private TopVentas CargaListaTopVentas(IDataReader Ready)
+        {
+            return new TopVentas
+            {
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                NombreCliente = Convert.ToString(Ready["Nombre"]),
+                Telefono = Convert.ToString(Ready["Telefono"]),
+                CantidadVentas = Convert.ToInt32(Ready["CantidadVentas"]),        
+            };
+        }
         #endregion Metodos Carga de Datos
 
         #region Metodos Obtener
@@ -348,6 +359,39 @@ namespace Borboletas.AccesoDatos
                 conexion.Close();
 
                 return CuentasXCobrar;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<TopVentas> ObtenerTopVentas(string Anno)
+        {
+            List<TopVentas> TopVentas = new List<TopVentas>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerTopVentas";
+                cmd.Parameters.AddWithValue("@anno", Anno);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    TopVentas.Add(CargaListaTopVentas(DsReader));
+                }
+
+                conexion.Close();
+
+                return TopVentas;
             }
             catch (Exception ex)
             {
