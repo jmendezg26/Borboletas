@@ -137,6 +137,17 @@ namespace Borboletas.AccesoDatos
                 CantidadVentas = Convert.ToInt32(Ready["CantidadVentas"]),        
             };
         }
+
+        private HistorialNotasCxC CargaListaNotasCxC(IDataReader Ready)
+        {
+            return new HistorialNotasCxC
+            {
+                IdNota = Convert.ToInt32(Ready["IdNota"]),
+                Nota = Convert.ToString(Ready["Nota"]),
+                FechaRegistro = Convert.ToDateTime(Ready["FechaRegistro"]),
+                Usuario = Convert.ToString(Ready["Usuario"]),
+            };
+        }
         #endregion Metodos Carga de Datos
 
         #region Metodos Obtener
@@ -400,6 +411,39 @@ namespace Borboletas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<HistorialNotasCxC> ObtenerNotasCxC(int IdCuentaCxC)
+        {
+            List<HistorialNotasCxC> NotasCxC = new List<HistorialNotasCxC>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerNotasCxC";
+                cmd.Parameters.AddWithValue("@IdCxC", IdCuentaCxC);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    NotasCxC.Add(CargaListaNotasCxC(DsReader));
+                }
+
+                conexion.Close();
+
+                return NotasCxC;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -550,6 +594,43 @@ namespace Borboletas.AccesoDatos
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public int AgregarNota(NuevaNota LaNota)
+        {
+            int Venta = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarNotaCxC";
+                cmd.Parameters.AddWithValue("@IdCxC", LaNota.IdCuentaXCobrar);
+                cmd.Parameters.AddWithValue("@Nota", LaNota.Nota);
+                cmd.Parameters.AddWithValue("@IdUsuario", LaNota.IdUsuario);
+
+
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Venta = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Venta;
         }
         #endregion Metodos Insertar
 

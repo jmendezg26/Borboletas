@@ -119,6 +119,20 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<HistorialNotasCxC> ObtenerNotasCxC(int IdCuentaCxC)
+        {
+            List<HistorialNotasCxC> NotasCxC = new List<HistorialNotasCxC>();
+
+            try
+            {
+                return NotasCxC = _VentasAD.ObtenerNotasCxC(IdCuentaCxC);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -180,6 +194,22 @@ namespace Borboletas.LogicaNegocio
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public int AgregarNota(NuevaNota LaNota)
+        {
+            int Nota = 0;
+
+            try
+            {
+                Nota = _VentasAD.AgregarNota(LaNota);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Nota;
         }
 
         #endregion Metodos Insertar

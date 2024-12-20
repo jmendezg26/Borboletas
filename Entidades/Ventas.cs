@@ -182,4 +182,20 @@
 
     }
 
+    public class NuevaNota
+    {
+        public string Nota { get; set; }
+        public int IdUsuario { get; set; }
+        public int IdCuentaXCobrar { get; set; }
+
+    }
+
+    public class HistorialNotasCxC
+    {
+        public int IdNota { get; set; }
+        public String Nota { get; set; }
+        public string Usuario { get; set; }
+        public DateTime FechaRegistro { get; set; }
+    }
+
 }
