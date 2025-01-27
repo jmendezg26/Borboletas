@@ -133,9 +133,25 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public double ObtenerTipoCambio()
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                TipoCambio = _VentasAD.ObtenerTipoCambio();
+
+                return TipoCambio;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
-        #region Metodos Insertar
+            #region Metodos Insertar
         public int AgregarVenta(NuevaVenta LaVenta)
         {
             int Venta = 0;
@@ -212,6 +228,22 @@ namespace Borboletas.LogicaNegocio
             return Nota;
         }
 
+
+        public double AgregarTipoCambio(double TipoDeCambio)
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                TipoCambio = _VentasAD.AgregarTipoCambio(TipoDeCambio);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return TipoCambio;
+        }
         #endregion Metodos Insertar
 
         #region Metodos Editar

@@ -444,6 +444,38 @@ namespace Borboletas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public double ObtenerTipoCambio()
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerTipoCambio";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                if (DsReader.Read())
+                {
+                    TipoCambio = double.Parse(DsReader[0].ToString());
+                }
+
+                conexion.Close();
+
+                return TipoCambio;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -631,6 +663,39 @@ namespace Borboletas.AccesoDatos
             }
 
             return Venta;
+        }
+
+        public int AgregarTipoCambio(double TipoDeCambio)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarTipoCambio";
+                cmd.Parameters.AddWithValue("@TipoCambio", TipoDeCambio);
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
         }
         #endregion Metodos Insertar
 

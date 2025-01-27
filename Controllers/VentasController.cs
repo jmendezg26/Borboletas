@@ -252,6 +252,30 @@ namespace Borboletas.Controllers
                 return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
             }
         }
+
+        [HttpGet("ObtenerTipoDeCambio")]
+        public IActionResult ObtenerTipoDeCambio()
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                TipoCambio = _VentasLN.ObtenerTipoCambio();
+
+                if (TipoCambio > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = TipoCambio, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo obtener el tipo de cambio", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar     
@@ -467,6 +491,30 @@ namespace Borboletas.Controllers
             }
         }
 
+        [HttpPost("InsertarTipoDeCambio")]
+        public async Task<IActionResult> InsertarTipoDeCambio(double TipoDeCambio)
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                TipoCambio = _VentasLN.AgregarTipoCambio(TipoDeCambio);
+
+                if (TipoCambio != 0)
+                {
+
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = TipoCambio, success = true }));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(new { msg = "No se pudo insertar el tipo de cambio", success = false }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { msg = "Imposible ejecutar su transación", success = false });
+            }
+        }
 
         #endregion Metodos Insertar
 
