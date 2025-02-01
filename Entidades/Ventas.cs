@@ -142,6 +142,7 @@
         public int IdEstadoVenta { get; set; }
         public int TipoMoneda { get; set; }
         public string NombreCliente { get; set; }
+        public string Tiendas { get; set; }
     }
 
     public class HistorialComprasTiendas
