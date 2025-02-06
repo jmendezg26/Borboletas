@@ -79,6 +79,7 @@ namespace Borboletas.AccesoDatos
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
                 NombreCliente = Convert.ToString(Ready["Cliente"]),
                 Tiendas = Convert.ToString(Ready["Tiendas"]),
+                CantidadArticulos = Convert.ToInt32(Ready["CantidadArticulos"]),
             };
         }
 
