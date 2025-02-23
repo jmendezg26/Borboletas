@@ -105,9 +105,53 @@ namespace Borboletas.LogicaNegocio
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<TopVentas> ObtenerTopVentas(string Anno)
+        {
+            List<TopVentas> TopVentas = new List<TopVentas>();
+
+            try
+            {
+                return TopVentas = _VentasAD.ObtenerTopVentas(Anno);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialNotasCxC> ObtenerNotasCxC(int IdCuentaCxC)
+        {
+            List<HistorialNotasCxC> NotasCxC = new List<HistorialNotasCxC>();
+
+            try
+            {
+                return NotasCxC = _VentasAD.ObtenerNotasCxC(IdCuentaCxC);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public double ObtenerTipoCambio()
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                TipoCambio = _VentasAD.ObtenerTipoCambio();
+
+                return TipoCambio;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
-        #region Metodos Insertar
+            #region Metodos Insertar
         public int AgregarVenta(NuevaVenta LaVenta)
         {
             int Venta = 0;
@@ -168,6 +212,38 @@ namespace Borboletas.LogicaNegocio
             }
         }
 
+        public int AgregarNota(NuevaNota LaNota)
+        {
+            int Nota = 0;
+
+            try
+            {
+                Nota = _VentasAD.AgregarNota(LaNota);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Nota;
+        }
+
+
+        public double AgregarTipoCambio(double TipoDeCambio)
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                TipoCambio = _VentasAD.AgregarTipoCambio(TipoDeCambio);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return TipoCambio;
+        }
         #endregion Metodos Insertar
 
         #region Metodos Editar

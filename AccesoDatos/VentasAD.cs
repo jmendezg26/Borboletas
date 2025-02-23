@@ -78,6 +78,8 @@ namespace Borboletas.AccesoDatos
                 IdEstadoVenta = Convert.ToInt32(Ready["IdEstado"]),
                 TipoMoneda = Convert.ToInt32(Ready["TipoMoneda"]),
                 NombreCliente = Convert.ToString(Ready["Cliente"]),
+                Tiendas = Convert.ToString(Ready["Tiendas"]),
+                CantidadArticulos = Convert.ToInt32(Ready["CantidadArticulos"]),
             };
         }
 
@@ -121,7 +123,31 @@ namespace Borboletas.AccesoDatos
                 PesoTotal = Convert.ToDouble(Ready["PesoTotal"]),
                 IdCliente = Convert.ToInt32(Ready["IdCliente"]),
                 Cliente = Convert.ToString(Ready["Nombre"]),
-                Articulos = Convert.ToString(Ready["Articulos"])
+                Articulos = Convert.ToString(Ready["Articulos"]),
+                Telefono = Convert.ToString(Ready["Telefono"]),
+                TelefonoSecundario = Convert.ToString(Ready["TelefonoSecundario"]),
+            };
+        }
+
+        private TopVentas CargaListaTopVentas(IDataReader Ready)
+        {
+            return new TopVentas
+            {
+                IdCliente = Convert.ToInt32(Ready["IdCliente"]),
+                NombreCliente = Convert.ToString(Ready["Nombre"]),
+                Telefono = Convert.ToString(Ready["Telefono"]),
+                CantidadVentas = Convert.ToInt32(Ready["CantidadVentas"]),        
+            };
+        }
+
+        private HistorialNotasCxC CargaListaNotasCxC(IDataReader Ready)
+        {
+            return new HistorialNotasCxC
+            {
+                IdNota = Convert.ToInt32(Ready["IdNota"]),
+                Nota = Convert.ToString(Ready["Nota"]),
+                FechaRegistro = Convert.ToDateTime(Ready["FechaRegistro"]),
+                Usuario = Convert.ToString(Ready["Usuario"]),
             };
         }
         #endregion Metodos Carga de Datos
@@ -354,6 +380,104 @@ namespace Borboletas.AccesoDatos
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<TopVentas> ObtenerTopVentas(string Anno)
+        {
+            List<TopVentas> TopVentas = new List<TopVentas>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerTopVentas";
+                cmd.Parameters.AddWithValue("@anno", Anno);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    TopVentas.Add(CargaListaTopVentas(DsReader));
+                }
+
+                conexion.Close();
+
+                return TopVentas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<HistorialNotasCxC> ObtenerNotasCxC(int IdCuentaCxC)
+        {
+            List<HistorialNotasCxC> NotasCxC = new List<HistorialNotasCxC>();
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerNotasCxC";
+                cmd.Parameters.AddWithValue("@IdCxC", IdCuentaCxC);
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                while (DsReader.Read())
+                {
+                    NotasCxC.Add(CargaListaNotasCxC(DsReader));
+                }
+
+                conexion.Close();
+
+                return NotasCxC;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public double ObtenerTipoCambio()
+        {
+            double TipoCambio = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_ObtenerTipoCambio";
+
+                SqlDataReader DsReader = cmd.ExecuteReader();
+
+                if (DsReader.Read())
+                {
+                    TipoCambio = double.Parse(DsReader[0].ToString());
+                }
+
+                conexion.Close();
+
+                return TipoCambio;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion Metodos Obtener
 
         #region Metodos Insertar
@@ -504,6 +628,76 @@ namespace Borboletas.AccesoDatos
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public int AgregarNota(NuevaNota LaNota)
+        {
+            int Venta = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarNotaCxC";
+                cmd.Parameters.AddWithValue("@IdCxC", LaNota.IdCuentaXCobrar);
+                cmd.Parameters.AddWithValue("@Nota", LaNota.Nota);
+                cmd.Parameters.AddWithValue("@IdUsuario", LaNota.IdUsuario);
+
+
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Venta = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Venta;
+        }
+
+        public int AgregarTipoCambio(double TipoDeCambio)
+        {
+            int Resultado = 0;
+
+            try
+            {
+                using SqlConnection conexion = new SqlConnection(_BDConnection.BD_CONEXION);
+
+                conexion.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "PA_InsertarTipoCambio";
+                cmd.Parameters.AddWithValue("@TipoCambio", TipoDeCambio);
+
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt);
+                cmd.Parameters["@ID"].Direction = ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+
+                Resultado = Convert.ToInt32(cmd.Parameters["@ID"].Value);
+
+                conexion.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return Resultado;
         }
         #endregion Metodos Insertar
 

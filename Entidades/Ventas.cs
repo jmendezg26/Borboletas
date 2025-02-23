@@ -4,6 +4,15 @@
     {
     }
 
+    public class TopVentas
+    {
+        public int IdCliente { get; set; }
+        public string NombreCliente { get; set; }
+        public string Telefono { get; set; }
+        public int CantidadVentas { get; set; }
+    }
+
+
     public class ListarVentas
     {
         public int IdVenta { get; set; }
@@ -133,6 +142,8 @@
         public int IdEstadoVenta { get; set; }
         public int TipoMoneda { get; set; }
         public string NombreCliente { get; set; }
+        public string Tiendas { get; set; }
+        public int CantidadArticulos { get; set; }
     }
 
     public class HistorialComprasTiendas
@@ -168,7 +179,25 @@
         public int IdCliente { get; set; }
         public string Cliente { get; set; }
         public string Articulos { get; set; }
+        public string Telefono { get; set; }
+        public string TelefonoSecundario { get; set; }
 
+    }
+
+    public class NuevaNota
+    {
+        public string Nota { get; set; }
+        public int IdUsuario { get; set; }
+        public int IdCuentaXCobrar { get; set; }
+
+    }
+
+    public class HistorialNotasCxC
+    {
+        public int IdNota { get; set; }
+        public String Nota { get; set; }
+        public string Usuario { get; set; }
+        public DateTime FechaRegistro { get; set; }
     }
 
 }
